@@ -1,0 +1,9 @@
+.DS_Store
+node_modules
+.tmp
+npm-debug.log
+.exe
+.ilk 
+.obj
+.pdb
+build

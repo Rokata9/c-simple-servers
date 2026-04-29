@@ -1,0 +1,11 @@
+---
+Language: Cpp
+BasedOnStyle: LLVM
+
+IndentWidth: 4
+
+AlignConsecutiveDeclarations: true
+PointerAlignment: Right
+
+AlwaysBreakAfterReturnType: All
+BreakBeforeBraces: Allman
