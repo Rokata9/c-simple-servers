@@ -9,3 +9,4 @@ PointerAlignment: Right
 
 AlwaysBreakAfterReturnType: All
 BreakBeforeBraces: Allman
+ColumnLimit: 120
