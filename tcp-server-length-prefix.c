@@ -15,7 +15,7 @@ bool
 read_exact(int socket_fd, void *buffer, size_t n)
 {
     size_t bytes_read_total = 0;
-    char  *buf_ptr = (char *)buffer;
+    char  *buf_ptr          = (char *)buffer;
 
     while (bytes_read_total < n)
     {
@@ -38,7 +38,7 @@ bool
 read_varint(int socket_fd, uint32_t *out_length)
 {
     uint32_t result = 0;
-    int      shift = 0;
+    int      shift  = 0;
     uint8_t  byte;
 
     while (1)
@@ -157,8 +157,8 @@ main()
     int opt = 1; // Prevents "Address already in use" errors during testing
     setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
 
-    address.sin_family = AF_INET;
-    address.sin_port = htons(INTERNAL_PORT);
+    address.sin_family      = AF_INET;
+    address.sin_port        = htons(INTERNAL_PORT);
     address.sin_addr.s_addr = inet_addr("127.0.0.1");
 
     if (bind(server_fd, (struct sockaddr *)&address, sizeof(address) < 0))

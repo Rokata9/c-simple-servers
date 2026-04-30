@@ -1,12 +1,15 @@
 ---
-Language: Cpp
+Language: C
 BasedOnStyle: LLVM
 
 IndentWidth: 4
 
-AlignConsecutiveDeclarations: true
+AlignConsecutiveDeclarations: Consecutive
 PointerAlignment: Right
 
 AlwaysBreakAfterReturnType: All
 BreakBeforeBraces: Allman
 ColumnLimit: 120
+
+# 1. Align the '=' signs
+AlignConsecutiveAssignments: Consecutive

@@ -9,13 +9,13 @@ uint8_t *
 convert_to_content_length_bytes(uint32_t payload_length)
 {
     int      processed_bytes = 0;
-    int      shift = 0;
-    uint8_t *result = calloc(MAX_LENGTH_BYTES, sizeof(uint8_t));
-    uint32_t remaining = payload_length;
+    int      shift           = 0;
+    uint8_t *result          = calloc(MAX_LENGTH_BYTES, sizeof(uint8_t));
+    uint32_t remaining       = payload_length;
 
     while (1)
     {
-        uint32_t bits_mask = 0x7F << shift;
+        uint32_t bits_mask            = 0x7F << shift;
         uint32_t cur_seven_bits_value = bits_mask & payload_length;
 
         // cap it to max 127

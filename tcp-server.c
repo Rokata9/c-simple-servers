@@ -25,7 +25,7 @@ main()
 
     // configure the address
     address.sin_family = AF_INET;
-    address.sin_port = htons(INTERNAL_PORT);
+    address.sin_port   = htons(INTERNAL_PORT);
     // listen only on localhost, the outside world cannot reach this
     address.sin_addr.s_addr = inet_addr("127.0.0.1");
 
@@ -44,15 +44,13 @@ main()
         exit(EXIT_FAILURE);
     }
 
-    printf("Server listening securely on http://127.0.0.1:%d ...\n",
-           INTERNAL_PORT);
+    printf("Server listening securely on http://127.0.0.1:%d ...\n", INTERNAL_PORT);
     printf("Press Ctrl+C to stop.\n\n");
 
     // A server is just a program stuck in an infinite loop, waiting for work
     while (1)
     {
-        client_socket = accept(server_fd, (struct sockaddr *)&address,
-                               (socklen_t *)&addrlen);
+        client_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t *)&addrlen);
         if (client_socket < 0)
         {
             perror("Accept failed");
