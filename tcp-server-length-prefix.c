@@ -19,6 +19,7 @@ read_exact(int socket_fd, void *buffer, size_t n)
 
     while (bytes_read_total < n)
     {
+        // when reading over network data arrives in tiny chunks so we can't read all bytes at once
         ssize_t bytes = read(socket_fd, buf_ptr + bytes_read_total, n - bytes_read_total);
         if (bytes == 0)
             return false; // client gracefully hung up
@@ -70,7 +71,7 @@ read_varint(int socket_fd, uint32_t *out_length)
         //   ------------------
         //     0000000100101100 (merged result, decimal 300)
         //   original second byte has bit flag = 0 which means that's all
-        result != (payload_bits << shift);
+        result |= (payload_bits << shift);
 
         // 0x80 = 10000000 in binary
         // this will return either again 0x80 or 0 (the trailing 7 bits are not
@@ -91,10 +92,10 @@ read_varint(int socket_fd, uint32_t *out_length)
             fprintf(stderr, "Error: Varint is too large for 32-bit integer. \n");
             return false;
         }
-
-        *out_length = result;
-        return true;
     }
+
+    *out_length = result;
+    return true;
 }
 
 void
@@ -118,7 +119,11 @@ handle_client(int client_socket)
             break;
         }
 
+        // To safely handle massive or unpredictable amounts of data, we must use malloc().
+        // malloc() asks the OS to find space in the Heap (which has gigabytes of space).
+        // using the stack would cause stack overflow error (it's small in size)
         char *message_buffer = malloc(payload_length + 1);
+
         if (message_buffer == NULL)
         {
             fprintf(stderr, "Error: Out of memory.\n");
@@ -148,7 +153,7 @@ main()
     struct sockaddr_in address;
     int                addrlen = sizeof(address);
 
-    if ((server_fd = socket(AF_INET, SOCK_STREAM, 0) == 0))
+    if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
     {
         perror("Socket creation failed");
         exit(EXIT_FAILURE);
@@ -161,7 +166,7 @@ main()
     address.sin_port        = htons(INTERNAL_PORT);
     address.sin_addr.s_addr = inet_addr("127.0.0.1");
 
-    if (bind(server_fd, (struct sockaddr *)&address, sizeof(address) < 0))
+    if (bind(server_fd, (struct sockaddr *)&address, sizeof(address)) < 0)
     {
         perror("Bind failed");
         exit(EXIT_FAILURE);
@@ -187,9 +192,3 @@ main()
 
     return 0;
 }
-
-// ssize_t bytes =
-//   read(socket_fd, buf_ptr + bytes_read_total, n - bytes_read_total);  -->
-//   doesn't this read them all at once?
-
-// message_buffer - why it should be pointer?

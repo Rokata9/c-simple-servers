@@ -1,8 +1,10 @@
-#include <arpa/inet.h> // For socket structures and functions
+#include <arpa/inet.h>
+#include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h> // For read(), write(), close()
+#include <unistd.h>
 
 #define INTERNAL_PORT 8080
 #define CHUNKS_SIZE 4096 // 4 KB for streaming
@@ -86,8 +88,4 @@ main()
 
     return 0; // never reached
 }
-
-// When you call read(), you are pulling 4,096 bytes out of the OS kernel's
-// receive buffer. -> whhy CHUNKS_SIZE - 1 then?
-
 // gcc http-server.c -o ./build/http-server && ../build/http-server
